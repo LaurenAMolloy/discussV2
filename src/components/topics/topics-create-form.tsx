@@ -1,7 +1,7 @@
 'use client'
 
 import { useActionState } from 'react'
-
+import FormButton from '../common/FormButton'
 import {
     Input,
     Button,
@@ -43,8 +43,9 @@ export default function TopicCreateForm() {
                     isInvalid={!!formState.errors.description}
                     errorMessage={formState.errors.description?.join(',')}></Textarea>
                      {formState.errors._form? <div className="rounded p-2 bg-red-200 border border-red-400">{formState.errors._form?.join(',')}</div> : null}
-                    <Button type="submit">Submit</Button>
+                    
                 </div>
+                <FormButton>Submit</FormButton>
             </form>
         </PopoverContent>
         </Popover>

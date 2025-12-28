@@ -1,11 +1,17 @@
 'use server'
 
+import type { Topic } from '@prisma/client'
+import { revalidatePath } from 'next/cache'
+import { redirect } from 'next/navigation'
 import { z } from 'zod';
-import { auth } from '@/auth'
+import { auth } from '@/auth';
+import { db } from '@/db';
+import paths from '@/path'
+
 
 const createTopicSchema = z.object({
         name: z.string().min(3).regex(/[a-z-]/, { 
-        message: "Must be lowercase or dashes without" 
+        message: "Must be lowercase or without dashes" 
     }),
     description: z.string().min(10)
 });
@@ -28,6 +34,8 @@ export async function createTopic(
     // const description = formData.get('description');
     // console.log(name, description);
 
+    await new Promise(resolve => setTimeout(resolve, 2500))
+
     const result = createTopicSchema.safeParse({
         name: formData.get('name'),
         description: formData.get('description')
@@ -35,7 +43,9 @@ export async function createTopic(
 
     //check if parsing was successful
     if(!result.success) {
-        console.log(result.error.flatten().fieldErrors);
+        return {
+            errors: result.error.flatten().fieldErrors
+        };
     }
 
     //If there is no session or user show error
@@ -48,8 +58,37 @@ export async function createTopic(
         };
     }
 
-    return {
-        errors: {}
+    let topic: Topic;
+    try {
+        topic = await db.topic.create({
+            data: {
+                //this is the validated data object from zod
+                //slug is a URL safe version of our name
+                slug: result.data.name,
+                description: result.data.description
+            }
+        });
+
+    } catch (err: unknown) {
+        if(err instanceof Error) {
+            return {
+                errors: {
+                    _form: [err.message]
+                }
+            }
+        }
+        else {
+            return {
+                errors: {
+                    _form: ['Something went wrong']
+                }
+            }
+        }    
     }
-     //Revalidate the homepage
+    
+    //Revalidate the homepage
+    revalidatePath('/')
+    
+    //Redirect cannot be stored in the try catch block
+    redirect(paths.topicShowPath(topic.slug))
 }
