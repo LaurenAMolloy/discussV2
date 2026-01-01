@@ -14,7 +14,7 @@ import * as actions from '@/actions'
 
 export default function TopicCreateForm() {
     //Pass in servers actions and whatever is returned from server actions will be the new form state
-    const [formState, action] = useActionState(actions.createTopic, { errors: {}});
+    const [formState, action, isPending] = useActionState(actions.createTopic, { errors: {}});
     
     //user clicks new topic
     //show popover with form
@@ -45,7 +45,7 @@ export default function TopicCreateForm() {
                      {formState.errors._form? <div className="rounded p-2 bg-red-200 border border-red-400">{formState.errors._form?.join(',')}</div> : null}
                     
                 </div>
-                <FormButton>Submit</FormButton>
+                <FormButton isLoading={isPending}>Submit</FormButton>
             </form>
         </PopoverContent>
         </Popover>

@@ -7,6 +7,7 @@ import { Button } from '@nextui-org/react'
 interface FormButtonProps {
     //children can be any React node
     children: React.ReactNode;
+    isLoading: boolean
 }
 
 export default function FormButton({children}: FormButtonProps){

@@ -92,7 +92,7 @@ export async function createPost(
                 errors: {
                     _form: [err.message]
                 }
-            }
+            };
 
         } else {
             return {
@@ -104,5 +104,6 @@ export async function createPost(
     }
 
     revalidatePath(paths.topicShowPath(slug));
+    //Send user to new post page
     redirect(paths.postShowPath(slug, post.id ))
 }

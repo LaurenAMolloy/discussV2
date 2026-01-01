@@ -34,7 +34,7 @@ export default function PostCreateForm({ slug }: PostCreateFormProps) {
             </Button>
         </PopoverTrigger>
         <PopoverContent>
-            <form>
+            <form action={action}>
                 <div className="flex flex-col gap-4 p-4 w-80">
                     <h3 className="text-lg">Create a Post</h3>
                     <Input
@@ -44,19 +44,19 @@ export default function PostCreateForm({ slug }: PostCreateFormProps) {
                     label="Title"
                     labelPlacement="outside"
                     placeholder="title"></Input>
-                    <Input
+                    <Textarea
                     isInvalid={!!formState.errors.content}
                     errorMessage={formState.errors.content?.join(',')}
                     name="content"
                     label="Content"
                     labelPlacement="outside"
-                    placeholder="Content"></Input>
+                    placeholder="Content"></Textarea>
 
                         {formState.errors._form ? (
                         <div className="rounded p-2 bg-red-200 border border-red-400">{formState.errors._form.join(',')}</div>
                         ) : null}
 
-                    <FormButton>Create Post</FormButton>
+                    <FormButton isLoading={isPending}>Create Post</FormButton>
                 </div>
             </form>
         </PopoverContent>

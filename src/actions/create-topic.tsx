@@ -6,7 +6,9 @@ import { redirect } from 'next/navigation'
 import { z } from 'zod';
 import { auth } from '@/auth';
 import { db } from '@/db';
-import paths from '@/path'
+import paths from '@/path';
+
+await new Promise(resolve => setTimeout(resolve, 2500))
 
 
 const createTopicSchema = z.object({
