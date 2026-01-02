@@ -3,7 +3,7 @@
 import { useActionState } from "react";
 import { useEffect, useRef, useState } from "react";
 import { Textarea, Button } from "@nextui-org/react";
-import FormButton from "@/components/common/FormButton";
+import FormButton from "@/components/common/form-button";
 import * as actions from "@/actions";
 
 interface CommentCreateFormProps {
@@ -19,7 +19,7 @@ export default function CommentCreateForm({
 }: CommentCreateFormProps) {
   const [open, setOpen] = useState(startOpen);
   const ref = useRef<HTMLFormElement | null>(null);
-  const [formState, action, isPending] = useActionState(
+  const [formState, action] = useActionState(
     actions.createComment.bind(null, { postId, parentId }),
     { errors: {} }
   );
@@ -51,7 +51,7 @@ export default function CommentCreateForm({
           </div>
         ) : null}
 
-        <FormButton isLoading={isPending}>Create Comment</FormButton>
+        <FormButton>Create Comment</FormButton>
       </div>
     </form>
   );

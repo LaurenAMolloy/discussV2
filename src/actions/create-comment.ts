@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { auth } from "@/auth";
 import { db } from "@/db";
-import paths from "@/path";
+import paths from "@/paths";
 
 const createCommentSchema = z.object({
   content: z.string().min(3),
@@ -34,7 +34,7 @@ export async function createComment(
   }
 
   const session = await auth();
-  if (!session || !session.user || !session.user.id) {
+  if (!session || !session.user) {
     return {
       errors: {
         _form: ["You must sign in to do this."],
@@ -79,7 +79,7 @@ export async function createComment(
     };
   }
 
-  revalidatePath(paths.postShowPath(topic.slug, postId));
+  revalidatePath(paths.postShow(topic.slug, postId));
   return {
     errors: {},
     success: true,
